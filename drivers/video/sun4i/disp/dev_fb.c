@@ -1080,6 +1080,9 @@ static struct fb_ops dispfb_ops =
 	.fb_setcolreg   = Fb_setcolreg,
 	.fb_setcmap     = Fb_setcmap,
 	.fb_blank       = Fb_blank,
+	.fb_fillrect	= cfb_fillrect,
+	.fb_copyarea	= cfb_copyarea,
+	.fb_imageblit	= cfb_imageblit,
 	.fb_cursor      = Fb_cursor,
 };
 
