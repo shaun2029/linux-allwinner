@@ -121,27 +121,37 @@ static void __init sw_core_fixup(struct machine_desc *desc,
 	pr_info("Total Detected Memory: %uMB with %d banks\n", size, mi->nr_banks);
 }
 
+#if defined CONFIG_FB || defined CONFIG_FB_MODULE
 unsigned long fb_start = (PLAT_PHYS_OFFSET + SZ_512M - SZ_64M - SZ_32M);
 unsigned long fb_size = SZ_32M;
 EXPORT_SYMBOL(fb_start);
 EXPORT_SYMBOL(fb_size);
+#endif
 
+#if defined CONFIG_SUN4I_G2D || defined CONFIG_SUN4I_G2D_MODULE
 unsigned long g2d_start = (PLAT_PHYS_OFFSET + SZ_512M - SZ_128M);
 unsigned long g2d_size = SZ_1M * 16;
 EXPORT_SYMBOL(g2d_start);
 EXPORT_SYMBOL(g2d_size);
+#endif
 
+#if defined CONFIG_MEDIA_SUPPORT
 unsigned long ve_start = (PLAT_PHYS_OFFSET + SZ_64M);
 unsigned long ve_size = (SZ_64M + SZ_16M);
 EXPORT_SYMBOL(ve_start);
 EXPORT_SYMBOL(ve_size);
+#endif
 
 static void __init sw_core_reserve(void)
 {
 	memblock_reserve(SYS_CONFIG_MEMBASE, SYS_CONFIG_MEMSIZE);
+#if defined CONFIG_FB || defined CONFIG_FB_MODULE
 	memblock_reserve(fb_start, fb_size);
+#endif
+#if defined CONFIG_MEDIA_SUPPORT
 	memblock_reserve(ve_start, SZ_64M);
 	memblock_reserve(ve_start + SZ_64M, SZ_16M);
+#endif
 
 #if 0
         int g2d_used = 0;
@@ -165,10 +175,16 @@ static void __init sw_core_reserve(void)
 
 #endif
 	pr_info("Memory Reserved(in bytes):\n");
+#if defined CONFIG_FB || defined CONFIG_FB_MODULE
 	pr_info("\tLCD: 0x%08x, 0x%08x\n", (unsigned int)fb_start, (unsigned int)fb_size);
+#endif
 	pr_info("\tSYS: 0x%08x, 0x%08x\n", (unsigned int)SYS_CONFIG_MEMBASE, (unsigned int)SYS_CONFIG_MEMSIZE);
+#if defined CONFIG_SUN4I_G2D || defined CONFIG_SUN4I_G2D_MODULE
 	pr_info("\tG2D: 0x%08x, 0x%08x\n", (unsigned int)g2d_start, (unsigned int)g2d_size);
+#endif
+#if defined CONFIG_MEDIA_SUPPORT
 	pr_info("\tVE : 0x%08x, 0x%08x\n", (unsigned int)ve_start, (unsigned int)ve_size);
+#endif
 }
 
 void sw_irq_ack(struct irq_data *irqd)
