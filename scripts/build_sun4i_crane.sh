@@ -109,6 +109,11 @@ build_modules()
 	    make -C modules/uinput LICHEE_MOD_DIR=${LICHEE_MOD_DIR} LICHEE_KDIR=${LICHEE_KDIR} install
 	fi
 
+        #build dm9601 USB lan driver
+	if [ -d "modules/dm9601_lan" ]; then
+	    make -C modules/dm9601_lan LICHEE_MOD_DIR=${LICHEE_MOD_DIR} LICHEE_KDIR=${LICHEE_KDIR} all
+	fi
+
 	(
 	export LANG=en_US.UTF-8
 	unset LANGUAGE
